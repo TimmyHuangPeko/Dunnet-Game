@@ -1,0 +1,40 @@
+hi, I found a bug that professor didn't mentioned before,
+which may cause from problems to crashes of the program.
+I think I've try my best to deal whith the bug, perhaps 
+professor can give me a few bonus of my assignment to make
+up the late submission of the first assignment.
+
+The bug is I found is: if you drop the key inside the building,
+permission of ~/PA2/start/e/e/ne/ne/ne would be changed 
+to 600 and then made many commands be out of action, ex. 
+n,s,w,e,l, and so on.
+I have check how it react in dunnet, and do what the game
+does.
+----------------------------------------------------------------
+So here's my solution.(Or you can find the full solution in my 
+assignment with the comment #this is special)
+
+In the case block 'drop', I add a flow control:
+
+if( -f ~/A/key && `pwd -P | cut -d"/" -f1-3 --complement` !~ PA2/start/e/e/ne/ne/ne*) chmod 600 ~/PA2/start/e/e/ne/ne/ne
+
+if you drop the key, the program will find out if you're inside
+the building or not. And the permission will only change
+if you're not inside the building. This can at least make
+sure functionality of the commands.
+But the permission still have to be changed if you drop 
+the key in the building, so if you drop the key and then
+leave the building without the key, the permission should
+be changed to 600, and that make sense cause you don't
+have the key to enter the building again.
+So I also add a flow control in case '[nsew]':
+
+else if ( $cmd[1] == s && `pwd -P | cut -d"/" -f1-3 --complement` == PA2/start/e/e/ne/ne/ne && !(-f ~/I/key) ) then
+	    	cd `pwd -P`/$cmd[1]
+	    	chmod 600 ~/PA2/start/e/e/ne/ne/ne #this is special
+	    	see
+	    	
+if you leave the building -- command 's', the program
+will find out whether there's key in the ~/I, if not,
+the permission will be change to 600, make yourself
+locked outside the building.

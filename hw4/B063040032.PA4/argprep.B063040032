@@ -1,0 +1,58 @@
+s/^\ *//
+s/\ *$//
+s/\ \ */\ /g
+s/insert/put/
+s/throw/drop/
+s/take/get/
+s/^x$/l/
+s/^l\ \(.*\)/x\ \1/
+s/palms/tree/g
+s/emerald/bracelet/g
+s/card/board/g
+s/cpu/board/g
+N
+/^$/ d
+#:a; s/^\n$//; ta; 
+#If the pattern space is empty: exit and print nothing.
+/^i\(\ [^ ][^ \n]*\)*\n/ c i
+/^l\(\ [^ ][^ \n]*\)*\n/ c l
+/^[^x]\(\ [^ ][^ \n]*\)*\n/ c I don't understand that
+s/^drop/d/
+s/^get/g/
+s/^shake/s/
+s/^eat/e/
+s/^climb/c/
+s/^put/p/
+/^c\n/ {/tree/ c c tree
+; /palms/ c c tree
+; c There is nothing here to climb.
+;}
+/^g all/ c g all
+/^.\n/ c You must supply an object.
+/^.[^ ][^ ]*/ c I don't understand that
+h;
+s/^.\ \([^ ][^ \n]*\).*/\1 bear bin bins board boulder bracelet cabinet coconut coconuts computer food key lamp shovel tree trees vax /;
+/\([^ ][^ \n]*\).*\ \1\ / !c I do not know what that is.
+; g;
+/^p\(\ [^ \n]\{1,\}\)\{1,2\}\n/ c You must supply an indirect object.
+/^p/ {h;
+s/^p\(\ [^ \n]\{1,\}\)\{2\}\ \([^ \n]\{1,\}\).*/\2 bear bin bins board boulder bracelet cabinet coconut coconuts computer food key lamp shovel tree trees vax /;
+/^\([^ \n]\{1,\}\).*\ \1\ / !c I do not know what that indirect object is.
+; g;}
+s/^\([^p]\ [^ \n]\{1,\}\).*\n/\1\n/
+s/^\(p\(\ [^ \n]\{1,\}\)\{3\}\).*\n/\1\n/
+/^d/ {s/\n.*//; q;}
+/^e/ {s/\n.*//; q;}
+/^c/ {/^c\ \([^ \n]\{1,\}\)\n.*\1/ {s/\n.*//; q;};
+c I do not see that here.
+;}
+/^g/ {/^g\ \([^ \n]\{1,\}\)\n.*\1/ {s/\n.*//; q;};
+c I do not see that here.
+;}
+/^x/ {/^x\ \([^ \n]\{1,\}\)\n.*\1/ !s/\n/ @\n/;
+s/\n.*//; q;}
+/^s/ {/^s\ \([^ \n]\{1,\}\)\n.*\1/ !s/\n/ @\n/;
+s/\n.*//; q;}
+/^p/ {/^p\(\ [^ \n]\{1,\}\)\{2\}\ \([^ \n]\{1,\}\)\n.*\2/ !s/\n/ @\n/;
+s/\n.*//; q;}
+q
